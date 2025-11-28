@@ -1,6 +1,7 @@
 package com.example.tourismsystem.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -36,6 +37,7 @@ public class Guide {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "guide", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Tour> tours = new ArrayList<>();
 
     // Конструкторы

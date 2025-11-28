@@ -1,5 +1,6 @@
 package com.example.tourismsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -45,6 +46,7 @@ public class Tour {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "guide_id")
+    @JsonIgnore
     private Guide guide;
 
     @Enumerated(EnumType.STRING)
