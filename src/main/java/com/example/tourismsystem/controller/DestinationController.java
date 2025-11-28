@@ -39,7 +39,7 @@ public class DestinationController {
     // PUT обновить направление
     @PutMapping("/{id}")
     public ResponseEntity<Destination> updateDestination(@PathVariable Long id,
-                                                         @RequestBody Destination destinationDetails) {
+                                                          @RequestBody Destination destinationDetails) {
         Optional<Destination> optionalDestination = destinationRepository.findById(id);
         if (optionalDestination.isPresent()) {
             Destination destination = optionalDestination.get();
