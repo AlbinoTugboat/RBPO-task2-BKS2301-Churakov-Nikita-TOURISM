@@ -1,5 +1,6 @@
 package com.example.tourismsystem.config;
 
+import com.example.tourismsystem.security.jwt.JwtAuthenticationFilter;
 import com.example.tourismsystem.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
@@ -21,6 +24,11 @@ public class SecurityConfig {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
+    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -43,32 +51,36 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                // Временно отключаем CSRF для тестирования JWT
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth
-                                // ВСЕГДА сначала разрешаем публичные endpoints
+                                // Публичные endpoints
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers("/api/public/**").permitAll()
-                                .requestMatchers("/api/destinations").permitAll()
-                                .requestMatchers("/api/tours/available").permitAll()
-                                .requestMatchers("/api/guides").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/destinations").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/tours/available").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/guides").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/tours").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/tours/**").permitAll()
 
-                                // Затем защищенные endpoints
+                                // Защищенные по ролям
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/guides/**").hasAnyRole("GUIDE", "ADMIN")
+
+                                // Защищенные (требуют аутентификации)
+                                .requestMatchers(HttpMethod.POST, "/api/tours").authenticated()
+                                .requestMatchers(HttpMethod.PUT, "/api/tours/**").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/api/tours/**").authenticated()
                                 .requestMatchers("/api/bookings/**").authenticated()
                                 .requestMatchers("/api/reviews").authenticated()
 
-                                // ОСТОРОЖНО: этот паттерн может перекрывать другие!
-                                .requestMatchers(HttpMethod.GET, "/api/tours").permitAll()  // Разрешить просмотр
-                                .requestMatchers(HttpMethod.POST, "/api/tours").authenticated() // Создание только для авторизованных
-
                                 .anyRequest().authenticated()
                 )
-                .httpBasic(httpBasic -> {})
-                .authenticationProvider(authenticationProvider());
+                // Добавляем JWT фильтр перед UsernamePasswordAuthenticationFilter
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
