@@ -27,9 +27,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = getJwtFromRequest(request);
 
-            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt, "ACCESS")) {
+            // Используем validateAccessToken вместо validateToken
+            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateAccessToken(jwt)) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
-                authentication.setAuthenticated(true);
+
+                // Эта строка не нужна - getAuthentication уже возвращает аутентифицированный токен
+                // authentication.setAuthenticated(true);
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (AuthenticationException ex) {

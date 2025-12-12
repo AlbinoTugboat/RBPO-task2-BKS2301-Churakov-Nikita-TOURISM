@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,9 @@ import java.time.LocalDateTime;
 
 @Service
 public class TokenPairService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -51,7 +55,6 @@ public class TokenPairService {
         session.setRefreshToken(refreshToken);
         session.setIpAddress(ipAddress);
         session.setUserAgent(userAgent);
-        // Исправлено: используем Duration вместо plusMillis
         session.setExpiresAt(LocalDateTime.now().plus(Duration.ofMillis(getRefreshTokenExpiration())));
         session.setStatus(SessionStatus.ACTIVE);
 
@@ -86,12 +89,18 @@ public class TokenPairService {
 
         // Генерируем новую пару токенов
         String username = jwtTokenProvider.getUsernameFromToken(refreshToken);
-        User user = userRepository.findByUsername(username)
+
+        // Загружаем пользователя с ролями
+        User user = userRepository.findByUsernameWithRoles(username)
                 .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
 
-        // Создаем Authentication объект
+        // Создаем UserDetails из User
+        com.example.tourismsystem.service.UserDetailsImpl userDetails =
+                com.example.tourismsystem.service.UserDetailsImpl.build(user);
+
+        // Создаем Authentication объект с UserDetails
         Authentication authentication = new UsernamePasswordAuthenticationToken(
-                user.getUsername(), null, user.getAuthorities()
+                userDetails, null, userDetails.getAuthorities()
         );
 
         String newAccessToken = jwtTokenProvider.generateAccessToken(authentication);
@@ -103,7 +112,6 @@ public class TokenPairService {
         newSession.setRefreshToken(newRefreshToken);
         newSession.setIpAddress(ipAddress);
         newSession.setUserAgent(userAgent);
-        // Исправлено: используем getRefreshTokenExpiration() из JwtTokenProvider
         newSession.setExpiresAt(LocalDateTime.now().plus(Duration.ofMillis(jwtTokenProvider.getRefreshTokenExpiration())));
         newSession.setStatus(SessionStatus.ACTIVE);
 

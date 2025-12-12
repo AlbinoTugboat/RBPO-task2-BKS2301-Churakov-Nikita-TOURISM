@@ -15,6 +15,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetails;
+import com.example.tourismsystem.service.UserDetailsServiceImpl;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import java.util.Map;
+
+
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,6 +31,9 @@ import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+
+
+
 @RequestMapping("/api/auth")
 public class AuthController {
 
@@ -40,6 +51,72 @@ public class AuthController {
 
     @Autowired
     private TokenPairService tokenPairService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
+    @PostMapping("/test-login")
+    public ResponseEntity<?> testLogin(@RequestBody Map<String, String> request) {
+        String username = request.get("username");
+        String password = request.get("password");
+
+        System.out.println("=== TEST LOGIN START ===");
+        System.out.println("Username: " + username);
+        System.out.println("Password: " + password);
+        System.out.println("Password length: " + password.length());
+
+        // 1. Найти пользователя
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user == null) {
+            System.out.println("ERROR: User not found in DB");
+            return ResponseEntity.status(404).body("User not found");
+        }
+
+        System.out.println("User found: " + user.getUsername());
+        System.out.println("Stored hash: " + user.getPassword());
+        System.out.println("Hash length: " + user.getPassword().length());
+        System.out.println("Is active: " + user.getIsActive());
+
+        // 2. Проверить пароль напрямую
+        boolean matches = encoder.matches(password, user.getPassword());
+        System.out.println("Password matches (direct): " + matches);
+
+        // 3. Попробовать аутентификацию через AuthenticationManager
+        try {
+            System.out.println("Trying AuthenticationManager...");
+            Authentication auth = new UsernamePasswordAuthenticationToken(username, password);
+            Authentication result = authenticationManager.authenticate(auth);
+            System.out.println("AuthenticationManager success: " + result.isAuthenticated());
+            System.out.println("Authorities: " + result.getAuthorities());
+        } catch (Exception e) {
+            System.out.println("AuthenticationManager error: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        // 4. Проверить UserDetailsService
+        try {
+            System.out.println("Testing UserDetailsService...");
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            System.out.println("UserDetails loaded: " + userDetails.getUsername());
+            System.out.println("UserDetails authorities: " + userDetails.getAuthorities());
+            System.out.println("UserDetails enabled: " + userDetails.isEnabled());
+        } catch (Exception e) {
+            System.out.println("UserDetailsService error: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        System.out.println("=== TEST LOGIN END ===");
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("passwordMatches", matches);
+        response.put("userFound", true);
+        response.put("userActive", user.getIsActive());
+
+        return ResponseEntity.ok(response);
+    }
 
     /**
      * Регистрация нового пользователя
@@ -199,4 +276,5 @@ public class AuthController {
         }
         return request.getRemoteAddr();
     }
+
 }

@@ -32,16 +32,29 @@ public class JwtTokenProvider {
     }
 
     public String generateAccessToken(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username;
+        Collection<? extends GrantedAuthority> authorities;
+
+        // Универсальное получение username
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            username = userDetails.getUsername();
+            authorities = userDetails.getAuthorities();
+        } else {
+            // Если principal - строка (как в refreshTokens)
+            username = authentication.getName();
+            authorities = authentication.getAuthorities();
+        }
+
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtProperties.getAccessTokenExpiration());
 
-        List<String> roles = userDetails.getAuthorities().stream()
+        List<String> roles = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
+                .setSubject(username)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .claim("type", "ACCESS")
@@ -51,12 +64,21 @@ public class JwtTokenProvider {
     }
 
     public String generateRefreshToken(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username;
+
+        // Универсальное получение username
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            username = userDetails.getUsername();
+        } else {
+            username = authentication.getName();
+        }
+
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtProperties.getRefreshTokenExpiration());
 
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
+                .setSubject(username)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .claim("type", "REFRESH")
