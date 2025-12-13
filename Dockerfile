@@ -1,5 +1,5 @@
 # Первый этап: сборка
-FROM eclipse-temurin:17-jdk AS builder
+FROM eclipse-temurin:17-jdk-jammy AS builder
 
 WORKDIR /app
 
@@ -15,13 +15,13 @@ RUN chmod +x mvnw
 # Собираем приложение
 RUN ./mvnw clean package -DskipTests
 
-# Второй этап: финальный образ
-FROM openjdk:17-slim
+# Второй этап: финальный образ (JRE для уменьшения размера)
+FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
 
 # Создаем пользователя для безопасности
-RUN addgroup --system spring && adduser --system --ingroup spring spring
+RUN groupadd -r spring && useradd -r -g spring spring
 USER spring:spring
 
 # Копируем JAR из первого этапа
