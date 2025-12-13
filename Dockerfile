@@ -1,21 +1,20 @@
-# Первый этап: сборка
-FROM eclipse-temurin:17-jdk-jammy AS builder
+# Первый этап: сборка с Maven
+FROM maven:3.9.9-eclipse-temurin-17 AS builder
 
 WORKDIR /app
 
-# Копируем исходный код
-COPY .mvn .mvn
-COPY mvnw .
+# Копируем pom.xml для кэширования зависимостей
 COPY pom.xml .
+# Скачиваем зависимости (кэшируемый слой)
+RUN mvn dependency:go-offline
+
+# Копируем исходный код
 COPY src src
 
-# Даем права на выполнение
-RUN chmod +x mvnw
-
 # Собираем приложение
-RUN ./mvnw clean package -DskipTests
+RUN mvn clean package -DskipTests
 
-# Второй этап: финальный образ (JRE для уменьшения размера)
+# Второй этап: финальный образ
 FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
@@ -27,9 +26,10 @@ USER spring:spring
 # Копируем JAR из первого этапа
 COPY --from=builder /app/target/*.jar app.jar
 
-# Пробрасываем порты
+# Копируем SSL сертификаты (если нужно)
+# COPY src/main/resources/ssl/ /app/ssl/
+
 EXPOSE 8443
 EXPOSE 8080
 
-# Команда запуска
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
