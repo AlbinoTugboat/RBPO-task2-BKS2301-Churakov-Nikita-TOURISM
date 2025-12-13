@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Сертификаты и ключи (не коммитим)
+*.key
+*.csr
+*.crt
+*.jks
+Certificates/
+!src/main/resources/ssl/tourism-keystore.p12  # А этот файл НУЖЕН в репо
