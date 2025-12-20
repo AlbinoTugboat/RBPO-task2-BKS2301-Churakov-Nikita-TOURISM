@@ -68,7 +68,7 @@ public class BookingController {
             booking.setCustomerEmail(bookingRequest.getCustomerEmail());
             booking.setTour(tour);
             booking.setBookingDate(LocalDateTime.now());
-
+            booking.setTotalPrice(tour.getPrice());
             // Увеличиваем счетчик участников
             boolean added = tour.addParticipant();
             if (!added) {
