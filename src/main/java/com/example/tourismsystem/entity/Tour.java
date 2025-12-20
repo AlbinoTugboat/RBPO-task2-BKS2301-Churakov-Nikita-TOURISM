@@ -1,6 +1,7 @@
 package com.example.tourismsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "tours")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Tour {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
