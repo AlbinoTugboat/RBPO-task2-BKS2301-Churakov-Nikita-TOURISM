@@ -1,0 +1,1393 @@
+﻿{
+    "info":  {
+                 "name":  "Tourism System API - Full Operations",
+                 "_postman_id":  "b66a1a31-2f3a-4f0c-9e2f-3d4e5a6b7c8d",
+                 "description":  "Full Postman collection covering all current API operations in the project.",
+                 "schema":  "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+             },
+    "variable":  [
+                     {
+                         "key":  "baseUrl",
+                         "value":  "https://localhost:8443"
+                     },
+                     {
+                         "key":  "userUsername",
+                         "value":  "user1"
+                     },
+                     {
+                         "key":  "guideUsername",
+                         "value":  "guide1"
+                     },
+                     {
+                         "key":  "adminUsername",
+                         "value":  "admin"
+                     },
+                     {
+                         "key":  "commonPassword",
+                         "value":  "Password123!"
+                     },
+                     {
+                         "key":  "accessToken",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "refreshToken",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "userAccessToken",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "userRefreshToken",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "guideAccessToken",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "guideRefreshToken",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "adminAccessToken",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "adminRefreshToken",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "destinationId",
+                         "value":  "1"
+                     },
+                     {
+                         "key":  "guideId",
+                         "value":  "1"
+                     },
+                     {
+                         "key":  "tourId",
+                         "value":  "1"
+                     },
+                     {
+                         "key":  "bookingId",
+                         "value":  "1"
+                     },
+                     {
+                         "key":  "reviewId",
+                         "value":  "1"
+                     },
+                     {
+                         "key":  "customerEmail",
+                         "value":  "ivan@example.com"
+                     },
+                     {
+                         "key":  "searchDestination",
+                         "value":  "Paris"
+                     },
+                     {
+                         "key":  "startDate",
+                         "value":  "2027-01-01"
+                     },
+                     {
+                         "key":  "endDate",
+                         "value":  "2027-12-31"
+                     },
+                     {
+                         "key":  "maxPrice",
+                         "value":  "2000"
+                     },
+                     {
+                         "key":  "minRating",
+                         "value":  "4"
+                     }
+                 ],
+    "item":  [
+                 {
+                     "name":  "01 Auth",
+                     "item":  [
+                                  {
+                                      "name":  "Auth Status",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/auth/status",
+                                                      "auth":  {
+                                                                   "noauth":  [
+
+                                                                              ],
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Signup",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/auth/signup",
+                                                      "auth":  {
+                                                                   "noauth":  [
+
+                                                                              ],
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"username\":\"postman_user_{{$timestamp}}\",\"email\":\"postman_{{$timestamp}}@example.com\",\"password\":\"Password123!\",\"firstName\":\"Postman\",\"lastName\":\"User\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Login User",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/auth/login",
+                                                      "auth":  {
+                                                                   "noauth":  [
+
+                                                                              ],
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"username\":\"{{userUsername}}\",\"password\":\"{{commonPassword}}\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  },
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "let data = {};",
+                                                                                "try { data = pm.response.json(); } catch (e) {}",
+                                                                                "if (data.accessToken) { pm.collectionVariables.set(\u0027userAccessToken\u0027, data.accessToken); pm.collectionVariables.set(\u0027accessToken\u0027, data.accessToken); }",
+                                                                                "if (data.refreshToken) { pm.collectionVariables.set(\u0027userRefreshToken\u0027, data.refreshToken); pm.collectionVariables.set(\u0027refreshToken\u0027, data.refreshToken); }"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                }
+                                  },
+                                  {
+                                      "name":  "Login Admin",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/auth/login",
+                                                      "auth":  {
+                                                                   "noauth":  [
+
+                                                                              ],
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"username\":\"{{adminUsername}}\",\"password\":\"{{commonPassword}}\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  },
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "let data = {};",
+                                                                                "try { data = pm.response.json(); } catch (e) {}",
+                                                                                "if (data.accessToken) { pm.collectionVariables.set(\u0027adminAccessToken\u0027, data.accessToken); }",
+                                                                                "if (data.refreshToken) { pm.collectionVariables.set(\u0027adminRefreshToken\u0027, data.refreshToken); }"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                }
+                                  },
+                                  {
+                                      "name":  "Login Guide",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/auth/login",
+                                                      "auth":  {
+                                                                   "noauth":  [
+
+                                                                              ],
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"username\":\"{{guideUsername}}\",\"password\":\"{{commonPassword}}\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  },
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "let data = {};",
+                                                                                "try { data = pm.response.json(); } catch (e) {}",
+                                                                                "if (data.accessToken) { pm.collectionVariables.set(\u0027guideAccessToken\u0027, data.accessToken); }",
+                                                                                "if (data.refreshToken) { pm.collectionVariables.set(\u0027guideRefreshToken\u0027, data.refreshToken); }"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                }
+                                  },
+                                  {
+                                      "name":  "Refresh User Tokens",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/auth/refresh",
+                                                      "auth":  {
+                                                                   "noauth":  [
+
+                                                                              ],
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"refreshToken\":\"{{refreshToken}}\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  },
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "let data = {};",
+                                                                                "try { data = pm.response.json(); } catch (e) {}",
+                                                                                "if (data.accessToken) { pm.collectionVariables.set(\u0027accessToken\u0027, data.accessToken); pm.collectionVariables.set(\u0027userAccessToken\u0027, data.accessToken); }",
+                                                                                "if (data.refreshToken) { pm.collectionVariables.set(\u0027refreshToken\u0027, data.refreshToken); pm.collectionVariables.set(\u0027userRefreshToken\u0027, data.refreshToken); }"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                }
+                                  },
+                                  {
+                                      "name":  "Test Login (Debug)",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/auth/test-login",
+                                                      "auth":  {
+                                                                   "noauth":  [
+
+                                                                              ],
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"username\":\"{{userUsername}}\",\"password\":\"{{commonPassword}}\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Logout User",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/auth/logout",
+                                                      "auth":  {
+                                                                   "noauth":  [
+
+                                                                              ],
+                                                                   "type":  "noauth"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"refreshToken\":\"{{refreshToken}}\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "02 CSRF",
+                     "item":  [
+                                  {
+                                      "name":  "Get CSRF Token",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/csrf-token",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "03 Destinations",
+                     "item":  [
+                                  {
+                                      "name":  "Get All Destinations",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/destinations",
+                                                      "auth":  {
+                                                                   "noauth":  [
+
+                                                                              ],
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Get Destination By ID",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/destinations/{{destinationId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Create Destination",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/destinations",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{adminAccessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"name\":\"Postman Destination {{$timestamp}}\",\"description\":\"Destination created from Postman collection\",\"country\":\"Italy\",\"city\":\"Rome\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  },
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "let data = {};",
+                                                                                "try { data = pm.response.json(); } catch (e) {}",
+                                                                                "if (data.id) { pm.collectionVariables.set(\u0027destinationId\u0027, data.id); }"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                }
+                                  },
+                                  {
+                                      "name":  "Update Destination",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/destinations/{{destinationId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{adminAccessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"name\":\"Updated Destination\",\"description\":\"Updated via Postman\",\"country\":\"Spain\",\"city\":\"Barcelona\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Delete Destination",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/destinations/{{destinationId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{adminAccessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "04 Guides",
+                     "item":  [
+                                  {
+                                      "name":  "Get All Guides",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/guides",
+                                                      "auth":  {
+                                                                   "noauth":  [
+
+                                                                              ],
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Get Guide By ID",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/guides/{{guideId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{adminAccessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Create Guide",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/guides",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{adminAccessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"name\":\"Guide {{$timestamp}}\",\"email\":\"guide{{$timestamp}}@example.com\",\"phone\":\"+1-555-0101\",\"specialization\":\"City tours\",\"experienceYears\":6,\"isActive\":true}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  },
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "let data = {};",
+                                                                                "try { data = pm.response.json(); } catch (e) {}",
+                                                                                "if (data.id) { pm.collectionVariables.set(\u0027guideId\u0027, data.id); }"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                }
+                                  },
+                                  {
+                                      "name":  "Update Guide",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/guides/{{guideId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{adminAccessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"name\":\"Updated Guide\",\"email\":\"updated.guide@example.com\",\"phone\":\"+1-555-0102\",\"specialization\":\"Historical tours\",\"experienceYears\":8,\"isActive\":true}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Delete Guide",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/guides/{{guideId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{adminAccessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "05 Tours",
+                     "item":  [
+                                  {
+                                      "name":  "Get All Tours",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/tours",
+                                                      "auth":  {
+                                                                   "noauth":  [
+
+                                                                              ],
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Get Tour By ID",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/tours/{{tourId}}",
+                                                      "auth":  {
+                                                                   "noauth":  [
+
+                                                                              ],
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Get Available Tours",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/tours/available",
+                                                      "auth":  {
+                                                                   "noauth":  [
+
+                                                                              ],
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Create Tour",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/tours",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"title\":\"Postman Tour {{$timestamp}}\",\"description\":\"Created from full Postman collection\",\"startDate\":\"2027-06-10\",\"endDate\":\"2027-06-16\",\"maxParticipants\":12,\"price\":1299.99,\"status\":\"ACTIVE\",\"guide\":{\"id\":\"{{guideId}}\"},\"destinations\":[{\"id\":\"{{destinationId}}\"}]}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  },
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "let data = {};",
+                                                                                "try { data = pm.response.json(); } catch (e) {}",
+                                                                                "if (data.id) { pm.collectionVariables.set(\u0027tourId\u0027, data.id); }"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                }
+                                  },
+                                  {
+                                      "name":  "Update Tour",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/tours/{{tourId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"title\":\"Updated Tour\",\"description\":\"Updated by Postman\",\"startDate\":\"2027-07-01\",\"endDate\":\"2027-07-07\",\"maxParticipants\":15,\"price\":999.50,\"status\":\"ACTIVE\",\"guide\":{\"id\":\"{{guideId}}\"},\"destinations\":[{\"id\":\"{{destinationId}}\"}]}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Delete Tour",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/tours/{{tourId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "06 Bookings",
+                     "item":  [
+                                  {
+                                      "name":  "Get All Bookings",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/bookings",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Get Booking By ID",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/bookings/{{bookingId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Create Booking",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/bookings",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"customerName\":\"Postman Customer\",\"customerEmail\":\"postman.customer@example.com\",\"tourId\":\"{{tourId}}\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  },
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "let data = {};",
+                                                                                "try { data = pm.response.json(); } catch (e) {}",
+                                                                                "if (data.id) { pm.collectionVariables.set(\u0027bookingId\u0027, data.id); }",
+                                                                                "if (data.customerEmail) { pm.collectionVariables.set(\u0027customerEmail\u0027, data.customerEmail); }"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                }
+                                  },
+                                  {
+                                      "name":  "Update Booking",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/bookings/{{bookingId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"customerName\":\"Updated Customer\",\"customerEmail\":\"updated.customer@example.com\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Get Bookings By Customer Email",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/bookings/customer/{{customerEmail}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Get Bookings By Tour ID",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/bookings/tour/{{tourId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Delete Booking",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/bookings/{{bookingId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "07 Reviews",
+                     "item":  [
+                                  {
+                                      "name":  "Get All Reviews",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/reviews",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Get Review By ID",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/reviews/{{reviewId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Create Review",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/reviews",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"reviewText\":\"Great tour from Postman\",\"rating\":5,\"authorName\":\"Postman QA\",\"tour\":{\"id\":\"{{tourId}}\"},\"booking\":{\"id\":\"{{bookingId}}\"}}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  },
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "let data = {};",
+                                                                                "try { data = pm.response.json(); } catch (e) {}",
+                                                                                "if (data.id) { pm.collectionVariables.set(\u0027reviewId\u0027, data.id); }"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                }
+                                  },
+                                  {
+                                      "name":  "Update Review",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/reviews/{{reviewId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"reviewText\":\"Updated review text from Postman\",\"rating\":4,\"authorName\":\"Postman QA\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Get Reviews By Tour ID",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/reviews/tour/{{tourId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Get Reviews By Author",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/reviews/author/Postman QA",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Delete Review",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/reviews/{{reviewId}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "08 Business Operations",
+                     "item":  [
+                                  {
+                                      "name":  "Business: Book Tour Completely",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/business/tours/{{tourId}}/book",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"customerName\":\"Business Customer\",\"customerEmail\":\"business.customer@example.com\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Business: Cancel Booking",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/business/bookings/{{bookingId}}/cancel",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Business: Search Tours",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/business/tours/search?destination={{searchDestination}}\u0026startDate={{startDate}}\u0026endDate={{endDate}}\u0026maxPrice={{maxPrice}}\u0026minRating={{minRating}}",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Business: Guide Statistics",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/business/guides/{{guideId}}/statistics",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Business: Create Review With Validation",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/business/reviews/create-with-validation",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               },
+                                                      "body":  {
+                                                                   "raw":  "{\"bookingId\":\"{{bookingId}}\",\"reviewText\":\"Validated review from business endpoint\",\"rating\":5,\"authorName\":\"Updated Customer\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Business: Popular Destinations",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/business/destinations/popular",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Business: Cancel Tour Completely",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/business/tours/{{tourId}}/cancel-completely",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{accessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "09 Admin",
+                     "item":  [
+                                  {
+                                      "name":  "Admin Dashboard",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/admin/dashboard",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{adminAccessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Admin Users",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  "{{baseUrl}}/api/admin/users",
+                                                      "auth":  {
+                                                                   "bearer":  [
+                                                                                  {
+                                                                                      "key":  "token",
+                                                                                      "type":  "string",
+                                                                                      "value":  "{{adminAccessToken}}"
+                                                                                  }
+                                                                              ],
+                                                                   "type":  "bearer"
+                                                               }
+                                                  }
+                                  }
+                              ]
+                 }
+             ]
+}
