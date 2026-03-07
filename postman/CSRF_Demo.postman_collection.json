@@ -1,0 +1,84 @@
+{
+  "info": {
+    "name": "CSRF Demo Requests",
+    "_postman_id": "8f4f8e22-48b5-4f5b-a7bb-5ce0f5bf7d8c",
+    "description": "Two-step CSRF demo: get token and call protected endpoint.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:8443"
+    },
+    {
+      "key": "csrfToken",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1) Get CSRF Token",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/csrf-token",
+        "auth": {
+          "type": "noauth",
+          "noauth": []
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "let data = {};",
+              "try { data = pm.response.json(); } catch (e) {}",
+              "if (data.token) {",
+              "  pm.collectionVariables.set('csrfToken', data.token);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2) POST with CSRF",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-XSRF-TOKEN",
+            "value": "{{csrfToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Cookie",
+            "value": "XSRF-TOKEN={{csrfToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/csrf-demo/submit",
+        "auth": {
+          "type": "noauth",
+          "noauth": []
+        }
+      }
+    }
+  ]
+}
