@@ -20,7 +20,3 @@ Spring Boot приложение для управления туристиче�
 - **REST API** - полный CRUD + бизнес-операции
 
 
-
-### Настройка базы данных
-```sql
-CREATE DATABASE tourism_db;
